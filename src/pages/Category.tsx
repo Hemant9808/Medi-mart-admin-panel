@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import CustomCard from "../components/CustomCard";
-import AddCategory from "../components/AddCategory";
+// import AddCategory from "../components/AddCategory";
 import CreateProduct from "../components/CreateProduct";
 
 interface Category {
@@ -11,13 +11,13 @@ interface Category {
 }
 
 export default function Category() {
-  const token = localStorage.getItem("adminToken");
+//   const token = localStorage.getItem("adminToken");
   // if (!token)
   //     window.location.href = '/';
   const [modalVisible, setModalVisible] = useState(false);
 
   const [data, setData] = useState<Category[] | undefined>();
-  const [createCategory, setCreateCategory] = useState(false);
+//   const [createCategory, setCreateCategory] = useState(false);
   const [filteredCategory, setFilteredCategory] = useState<
     Category[] | undefined
   >();

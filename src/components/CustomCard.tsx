@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import EditCategory from "./EditCategory";
+// import EditCategory from "./EditCategory";
 
 interface Props {
     name: string;
@@ -14,7 +14,7 @@ export default function CustomCard({ name, link, refresh }: Props) {
     const [visible, setVisible] = useState(false);
     const [dataName, setDataName] = useState(name);
     //const [dataImageUrl, setDataImageUrl] = useState(imageUrl);
-    const [currentImage, setCurrentImage] = useState(0);
+    // const [currentImage, setCurrentImage] = useState(0);
 
     const token = localStorage.getItem('adminToken');
 
@@ -77,7 +77,7 @@ export default function CustomCard({ name, link, refresh }: Props) {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setCurrentImage(prevImage => prevImage + 1);
+            // setCurrentImage(prevImage => prevImage + 1);
         }, 4000);
 
         return () => {
