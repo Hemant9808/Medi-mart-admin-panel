@@ -3,7 +3,6 @@ import { useMediaQuery } from "react-responsive";
 import CustomCard from "../components/CustomCard";
 // import AddCategory from "../components/AddCategory";
 import CreateProduct from "../components/CreateProduct";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 
 interface Category {
   _id: string;
@@ -76,7 +75,7 @@ export default function Category() {
           <input
             type="text"
             placeholder="Search"
-            className=" px-4 py-2 mr-4  w-[350px] border-2 rounded-[2rem]"
+            className=" px-4 py-2 mb-4 w-[350px] border-2 rounded-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -115,15 +114,11 @@ export default function Category() {
       </div>
 
       {
-       
-        
         <CreateProduct
           
           visible={modalVisible}
           setVisible={setModalVisible}
         />
-        
-     
 
         // createCategory && <AddCategory token={token} setVisible={setCreateCategory} refresh={getData} />
       }

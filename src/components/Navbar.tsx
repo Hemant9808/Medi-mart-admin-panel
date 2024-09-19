@@ -10,12 +10,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
+    <nav className="bg-teal-600">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
         <div className="flex items-center">
-          <img src={logo} alt="Logo" className="w-16 h-16 rounded-sm" />
+          {/* <img src={logo} alt="Logo" className="w-16 h-16 rounded-sm" /> */}
           <Link to="https://adirayglobal.com/" className="text-white font-extrabold text-yellow-100 text-lg hover:text-yellow-400 transition duration-300 cursor-pointer">
-            Adiray
+            MediMart
           </Link>
         </div>
         <div className="md:hidden flex items-center justify-center">
@@ -36,7 +36,7 @@ const Navbar = () => {
             <Link to="/" className="relative font-semibold text-white cursor-pointer text-[17px] w-fit md:block after:block after:content-[''] after:absolute after:h-[3px] after:bg-yellow-400 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center hover:text-yellow-400 text-yellow-100">
               Blog
             </Link>
-            <Link to="/" className="relative font-semibold text-white cursor-pointer text-[17px] w-fit md:block after:block after:content-[''] after:absolute after:h-[3px] after:bg-yellow-400 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center text-yellow-100 hover:text-yellow-400">
+            <Link to="/admin/category" className="relative font-semibold text-white cursor-pointer text-[17px] w-fit md:block after:block after:content-[''] after:absolute after:h-[3px] after:bg-yellow-400 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center text-yellow-100 hover:text-yellow-400">
               Products
             </Link>
           </div>

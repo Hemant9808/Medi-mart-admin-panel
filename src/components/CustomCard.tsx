@@ -6,13 +6,16 @@ interface Props {
     //imageUrl: [string];
     link: string;
     refresh: () => void;
+    id:string
 }
 
-export default function CustomCard({ name, link, refresh }: Props) {
+export default function CustomCard({ name, link, refresh,id }: Props) {
 
     const [edit, setEdit] = useState(false);
     const [visible, setVisible] = useState(false);
     const [dataName, setDataName] = useState(name);
+    console.log("link",link);
+    
     //const [dataImageUrl, setDataImageUrl] = useState(imageUrl);
     // const [currentImage, setCurrentImage] = useState(0);
 
@@ -31,7 +34,7 @@ export default function CustomCard({ name, link, refresh }: Props) {
 
     async function updateCategory() {
         console.log('Updating category');
-        let response = await fetch('https://node-js-jwt-auth.onrender.com/api/category/update', {
+        let response = await fetch('https://medimart-nayg.onrender.com/product/addOrUpdateCategory', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +42,7 @@ export default function CustomCard({ name, link, refresh }: Props) {
 
             },
             body: JSON.stringify({
-                _id: link,
+                id: id,
                 name: dataName,
             })
         });

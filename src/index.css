@@ -107,3 +107,14 @@ a:active {
 .card2:hover {
   background-color: #F1F1F1;
 }
+.custom-scrollbar {
+  scrollbar-width: thin;  /* Firefox */
+  scrollbar-color: #747373  rgb(189, 193, 193); 
+  border-radius: 10px;
+  
+   /* Firefox rgb(110, 110, 238)  #888*/
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+ } 
