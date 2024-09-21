@@ -100,7 +100,7 @@ export default function CreateProduct({
       setAllCategories([...allCategories, newCategory]);
       setSelectedCategories([...selectedCategories, newCategory]);
       console.log("handleAddCategory", selectedCategories);
-      setVisible(false);
+      
       
     }
   };
