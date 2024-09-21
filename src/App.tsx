@@ -20,7 +20,7 @@ function App() {
     <Navbar/>
     <Routes>
       <Route path="/admin/category/:categoryId" element={<AdminProduct/>} />
-      <Route path="/admin/category/" element={<Category/>} />
+      <Route path="/" element={<Category/>} />
       <Route path="/admin/create/post" element={<CreatePost/>} />
       <Route path="/admin/login" element={<AdminLogin/>} />  
       <Route path="/admin/blog/" element={<Blog/>}/>

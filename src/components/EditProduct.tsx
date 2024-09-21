@@ -24,9 +24,9 @@ export default function EditProduct({ visible, setVisible, refresh, product }: E
     const { categoryId } = useParams<{ categoryId: string }>();
 
     const token = localStorage.getItem('adminToken');
-    if (!token) {
-        window.location.href = '/admin/login';
-    }
+    // if (!token) {
+    //     window.location.href = '/admin/login';
+    // }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
