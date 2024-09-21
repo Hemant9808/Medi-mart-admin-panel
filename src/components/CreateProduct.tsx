@@ -1,13 +1,16 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import CustomButton from "./CustomButton/CustomButton";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CreateProductProps {
   visible: boolean;
   setVisible: (visible: boolean) => void;
+  productId: string;
+  refresh:any
 }
 
 interface IFormInput {
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -16,11 +19,14 @@ interface IFormInput {
   stock: number;
   images: string;
   discountPrice?: number;
+
 }
 
 export default function CreateProduct({
-  visible,
+  // visible,
   setVisible,
+  productId,
+  refresh
 }: CreateProductProps) {
   const {
     register,
@@ -28,6 +34,7 @@ export default function CreateProduct({
     formState: { errors },
     reset,
   } = useForm<IFormInput>();
+  console.log("productId", productId);
 
   const [allCategories, setAllCategories] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -51,8 +58,41 @@ export default function CreateProduct({
     }
   };
 
+  const fetchProductById = async () => {
+    const response = await fetch(
+      `https://medimart-nayg.onrender.com/product/getProductById/${productId}`,
+      {
+        method: "POST",
+      }
+    );
+    const data = await response.json();
+    console.log("fetch Product", data);
+    if (data) {
+      reset({
+        id: data._id,
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        brand: data.brand,
+        manufacturer: data.manufacturer,
+        stock: data.stock,
+        images: data.images.join(","), // Convert images array back to comma-separated string
+        discountPrice: data.discountPrice,
+      });
+      setSelectedCategories(data.categories || []);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
+    if (productId) {
+      fetchProductById();
+    }
+    return () => {
+      reset();
+      setSelectedCategories([]);
+      setNewCategory("");
+    };
   }, []);
 
   const handleAddCategory = () => {
@@ -60,8 +100,8 @@ export default function CreateProduct({
       setAllCategories([...allCategories, newCategory]);
       setSelectedCategories([...selectedCategories, newCategory]);
       console.log("handleAddCategory", selectedCategories);
-
-      setNewCategory("");
+      setVisible(false);
+      
     }
   };
 
@@ -76,10 +116,10 @@ export default function CreateProduct({
     }
   };
 
-  const token = localStorage.getItem("adminToken");
-  if (!token) {
-    window.location.href = "/";
-  }
+  // const token = localStorage.getItem("adminToken");
+  // if (!token) {
+  //   window.location.href = "/";
+  // }
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const imagesArray = data.images
@@ -102,34 +142,35 @@ export default function CreateProduct({
     );
 
     const result = await response.json();
-    if (result.success) {
+    if (result) {
       setVisible(false);
       reset();
+      refresh();
     } else {
       console.error(result.message);
     }
   };
-  const popupRef = useRef(null);
-  const handleClickOutside = (event: any) => {
-    //@ts-ignore
-    if (popupRef.current && !popupRef.current.contains(event.target)) {
-      setVisible(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+  // const popupRef = useRef(null);
+  // const handleClickOutside = (event: any) => {
+  //   //@ts-ignore
+  //   if (popupRef.current && !popupRef.current.contains(event.target)) {
+  //     setVisible(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   return (
     <>
-      {visible && (
+      {/* {visible && ( */}
         <div className=" inset-0 z-50 h-[100%]  fixed flex items-center justify-center bg-black bg-opacity-75">
           <div
-            ref={popupRef}
+            // ref={popupRef}
             className="bg-white h-[100vh]  overflow-scroll hide-scrollbar  sm:h-[90%] rounded-lg p-8 shadow-lg max-w-md w-full"
           >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -361,7 +402,7 @@ export default function CreateProduct({
             </form>
           </div>
         </div>
-      )}
+     {/* )}  */}
     </>
   );
 }

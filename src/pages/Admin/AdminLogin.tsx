@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Popup from "../../components/Popup";
 
 export default function AdminLogin() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Invalid username & password combination');
-    const [visible, setVisible] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [signupUsername, setSignupUsername] = useState('');
     const [signupPassword, setSignupPassword] = useState('');
@@ -32,7 +30,6 @@ export default function AdminLogin() {
                 return;
             }
             localStorage.setItem('adminToken', data.token);
-            setVisible(true);
             
         } catch (err) {
             console.log(err);
@@ -61,7 +58,6 @@ export default function AdminLogin() {
             setUsername(signupUsername);
             setPassword(signupPassword);
             setShowSignup(false);
-            setVisible(true); // Show the popup after successful signup
         } catch (err) {
             console.log(err);
         }
@@ -114,7 +110,7 @@ export default function AdminLogin() {
                     </div>
                 </div>
             </div >
-            {visible && <Popup />}
+            
         </>
     );
 }

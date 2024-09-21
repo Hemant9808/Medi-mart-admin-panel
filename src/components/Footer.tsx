@@ -9,9 +9,9 @@ const Footer = () => {
  
   return (
     <footer
-      className="flex flex-col bg-[#0B1321]  justify-center "
+      className="flex flex-col  bg-teal-700 justify-center "
     >
-      <div className="flex pl-12 pb-8 sm:pl-0 justify-around items-start flex-col sm:flex-row gap-9 sm:gap-0 bg-[#0B1321] sm:pb-8 pt-8">
+      <div className="flex pl-12 pb-8 sm:pl-0 justify-around items-start flex-col sm:flex-row gap-9 sm:gap-0 bg-teal-700 sm:pb-8 pt-8">
       <div className="">
           <img
             className="w-[90px]"
@@ -26,17 +26,17 @@ const Footer = () => {
             quicklinks
           </h2>
           <li>
-            <Link className="text-gray-300 hover:text-[#ffd700] text-[14px]" to="">
+            <Link className="text-white hover:text-[#ffd700] text-[14px]" to="">
               Terms & Conditions
             </Link>
           </li>
           <li>
-            <Link className="text-gray-300 hover:text-[#ffd700] text-[14px]" to="">
+            <Link className="text-white hover:text-[#ffd700] text-[14px]" to="">
               Privacy and Cookies
             </Link>
           </li>
           <li>
-            <Link className="text-gray-300 hover:text-[#ffd700] text-[14px]" to="">
+            <Link className="text-white hover:text-[#ffd700] text-[14px]" to="">
               Licenses
             </Link>
           </li>
@@ -94,7 +94,7 @@ const Footer = () => {
         </ul>
       </div>
        
-        <div className="flex  justify-center items-center text-center p-4 text-gray-500 ">
+        <div className="flex  justify-center items-center text-center p-4 text-white ">
         ©2024 adirayglobal.com{' '}
         
         All rights reserved

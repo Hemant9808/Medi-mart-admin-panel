@@ -3,7 +3,8 @@ import { useMediaQuery } from "react-responsive";
 import CustomCard from "../components/CustomCard";
 // import AddCategory from "../components/AddCategory";
 import CreateProduct from "../components/CreateProduct";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { Dialog } from '@mui/material'
+import { refresh } from "aos";
 
 interface Category {
   _id: string;
@@ -58,6 +59,9 @@ export default function Category() {
     setFilteredCategory(filtered);
     console.log(filteredCategory);
   }, [data, searchQuery]);
+  const handleBack =()=>{
+    setModalVisible(false)
+  }
 
   return (
     <>
@@ -117,12 +121,16 @@ export default function Category() {
       {
        
         
-        <CreateProduct
-          
-          visible={modalVisible}
-          setVisible={setModalVisible}
-        />
-        
+       <Dialog className=' rounded-[50px]' open={modalVisible} onClose={handleBack}>
+
+       <CreateProduct
+       refresh={refresh}
+         productId= ""
+         visible={modalVisible}
+         setVisible={setModalVisible}
+       />
+       
+       </Dialog>
      
 
         // createCategory && <AddCategory token={token} setVisible={setCreateCategory} refresh={getData} />

@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import CreateProduct from "../../components/CreateProduct";
 import EditProduct from "../../components/EditProduct";
 import { useMediaQuery } from "react-responsive";
+import { Dialog } from "@mui/material";
+import Popup from "../../components/CustomModal";
 
 interface Product {
   name: string;
@@ -28,13 +30,10 @@ export default function AdminProduct(): JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   const [edit, setEdit] = useState(false);
   const { categoryId } = useParams();
-  const token = localStorage.getItem("adminToken");
+  // const token = localStorage.getItem("adminToken");
   const [query, setQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-
-  if (!token) {
-    window.location.href = "/admin/login";
-  }
+  const [productId, setProductId] = useState<string>();
 
   function refresh() {
     fetch(
@@ -61,7 +60,7 @@ export default function AdminProduct(): JSX.Element {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: "Bearer " + token,
+          // authorization: "Bearer " + token,
         },
         body: JSON.stringify(data),
       }
@@ -101,6 +100,9 @@ export default function AdminProduct(): JSX.Element {
         setImageUrl(data.imageUrl);
       });
   }, []);
+  const handleBack = () => {
+    setModalVisible(false);
+  };
 
   return (
     <>
@@ -140,6 +142,7 @@ export default function AdminProduct(): JSX.Element {
                 <button
                   onClick={() => {
                     setModalVisible(true);
+                    setProductId("");
                   }}
                   className="flex justify-center items-center px-5 py-3 mx-2 my-3 card2 "
                 >
@@ -169,15 +172,30 @@ export default function AdminProduct(): JSX.Element {
               )}
               {filteredProducts.map((item: Product, index: number) => (
                 <List
+                  setProductId={setProductId}
                   item={item}
                   index={index + 1}
                   key={index}
                   refresh={refresh}
+                  setModalVisible={setModalVisible}
+                  productId={productId || ""}
                 />
               ))}
             </div>
           </div>
-          <CreateProduct visible={modalVisible} setVisible={setModalVisible} />
+          <Dialog
+            className=" rounded-[50px]"
+            open={modalVisible}
+            onClose={handleBack}
+          >
+            <CreateProduct
+            refresh={refresh}
+            //@ts-ignore
+              productId={productId}
+              visible={modalVisible}
+              setVisible={setModalVisible}
+            />
+          </Dialog>
         </div>
       </div>
     </>
@@ -188,73 +206,49 @@ interface ListProps {
   item: Product;
   refresh: () => void;
   index: number;
+  setProductId: any;
+  setModalVisible: any;
+  productId?: string;
 }
 
-function List({ item, refresh, index }: ListProps) {
+function List({
+  item,
+  refresh,
+  index,
+  setProductId,
+  setModalVisible,
+  productId,
+}: ListProps) {
   const [productEdit, setProductEdit] = useState(false);
   const [name, setName] = useState(item.name);
-  const { categoryId } = useParams();
+  
 
   useEffect(() => {
     setName(item.name);
   }, [item]);
 
-  const token = localStorage.getItem("adminToken");
-  if (!token) {
-    window.location.href = "/admin/login";
-  }
+  // const token = localStorage.getItem("adminToken");
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const response = await fetch(
-      "https://node-js-jwt-auth.onrender.com/api/category/product/update",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          name: name,
-          productId: item._id,
-          categoryId: categoryId,
-        }),
-      }
-    );
-    const data = await response.json();
-    if (data.success) {
-      setProductEdit(false);
-      refresh();
-      console.log(data);
-    } else {
-      alert(data.message);
-    }
+ 
+  const [openPopup, setOpenPopup] = useState<boolean>(false);
+  const [popupText, setPopupText] = useState<string>("");
+
+  console.log(productId);
+
+  const onContinue = async () => {
+    console.log("continue clicked...");
+
+    await fetch(`https://medimart-nayg.onrender.com/product/deleteProduct/${productId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTE1NzFmZWM4M2VlM2E4OGJjNzI4YSIsImlhdCI6MTcyNjQxMzc1OX0.QH1quEr3Hakn0Ku4h7GSLbAlyrr1tj3QkEeeH9OooC0`,
+      },
+    });
+
+    setOpenPopup(false);
+    refresh();
   };
-
-  async function handleDelete() {
-    const response = await fetch(
-      `https://node-js-jwt-auth.onrender.com/api/category/${categoryId}/product/${item._id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          name: name,
-          productId: item._id,
-          categoryId: categoryId,
-        }),
-      }
-    );
-    const data = await response.json();
-    if (data.success) {
-      setProductEdit(false);
-      refresh();
-    } else {
-      alert(data.message);
-    }
-  }
 
   return (
     <>
@@ -263,6 +257,13 @@ function List({ item, refresh, index }: ListProps) {
         visible={false}
         setVisible={setProductEdit}
         product={item}
+      />
+      <Popup
+        //@ts-ignore
+        open={openPopup}
+        onClose={() => setOpenPopup(false)}
+        onContinue={onContinue}
+        heading={popupText}
       />
 
       <div
@@ -287,39 +288,33 @@ function List({ item, refresh, index }: ListProps) {
             )}
           </div>
         </div>
-        {productEdit ? (
-          <div>
-            <button
-              className="bg-blue-800 w-[70px] mx-2 text-white rounded-md text-[14px] p-1"
-              onClick={handleSubmit}
-            >
-              Save
-            </button>
-            <button
-              className="bg-blue-800 w-[70px] mx-2 text-white rounded-md text-[14px] p-1"
-              onClick={() => setProductEdit(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        ) : (
+    
+          
+     
           <>
             <div className="flex flex-nowrap">
               <button
-                className="bg-blue-800 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
-                onClick={() => setProductEdit(true)}
+                className="bg-teal-600 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
+                onClick={() => {
+                  setProductId(item._id);
+                  setModalVisible(true);
+                }}
               >
                 Edit
               </button>
               <button
-                className="bg-blue-800 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
-                onClick={handleDelete}
+                className="bg-red-700 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
+                onClick={() => {
+                  setProductId(item._id);
+                  setPopupText("Do your really want to delete this product ?");
+                  setOpenPopup(true);
+                }}
               >
                 Delete
               </button>
             </div>
           </>
-        )}
+        
       </div>
     </>
   );
