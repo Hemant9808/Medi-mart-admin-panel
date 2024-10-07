@@ -5,7 +5,7 @@ import EditProduct from "../../components/EditProduct";
 import { useMediaQuery } from "react-responsive";
 import { Dialog } from "@mui/material";
 import Popup from "../../components/CustomModal";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 
 interface Product {

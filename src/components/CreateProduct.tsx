@@ -472,7 +472,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
-import { UploadRounded } from "@mui/icons-material";
+// import { UploadRounded } from "@mui/icons-material";
 
 interface CreateProductProps {
   visible: boolean;
@@ -494,9 +494,7 @@ interface IFormInput {
   discountPrice?: number;
   category: [string];
 }
-interface image{
-  url:string
-}
+
 
 export default function CreateProduct({
   setVisible,
@@ -601,10 +599,10 @@ export default function CreateProduct({
     );
 
     const result = await response.json();
-    if (result) {
-      //setVisible(false);
-      //reset();
-     // refresh();
+    if (result.success) {
+      setVisible(false);
+      reset();
+     refresh();
     } else {
       console.error(result.message);
     }
