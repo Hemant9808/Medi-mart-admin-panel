@@ -5,6 +5,8 @@ import EditProduct from "../../components/EditProduct";
 import { useMediaQuery } from "react-responsive";
 import { Dialog } from "@mui/material";
 import Popup from "../../components/CustomModal";
+import { toast, ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 
 interface Product {
   name: string;
@@ -24,12 +26,14 @@ interface Category {
 export default function AdminProduct(): JSX.Element {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 700px)" });
 
-  const [data, setData] = useState<any | undefined>();
+  const [data, setData] = useState<any>();
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [edit, setEdit] = useState(false);
   const { categoryId } = useParams();
+  console.log("admin product", categoryId);
+
   // const token = localStorage.getItem("adminToken");
   const [query, setQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -84,7 +88,9 @@ export default function AdminProduct(): JSX.Element {
 
   useEffect(() => {
     fetch(
-      `https://medimart-nayg.onrender.com/product/getProductByCategories?category=${categoryId}`,
+      `http://localhost:4000/product/getProductByCategories?category=${categoryId}`,
+
+      // `https://medimart-nayg.onrender.com/product/getProductByCategories?category=${categoryId}`,
       {
         method: "GET",
 
@@ -103,9 +109,12 @@ export default function AdminProduct(): JSX.Element {
   const handleBack = () => {
     setModalVisible(false);
   };
-
+  const notify = () => {toast("Wow so easy!");console.log("toast...");
+  }
+  notify();
   return (
     <>
+     
       <div className="w-4/5 mx-auto mb-20 min-h-screen">
         <div>&nbsp;</div>
         <div
@@ -152,7 +161,7 @@ export default function AdminProduct(): JSX.Element {
             )}
           </div>
         </div>
-
+        <Toaster position="top-center" reverseOrder={false} />
         <div className="mb-20 mt-16">
           <div className="flex justify-center min-h-[600px]">
             <div className="w-[1000px] bg-gray-200 py-4 rounded-lg">
@@ -189,8 +198,8 @@ export default function AdminProduct(): JSX.Element {
             onClose={handleBack}
           >
             <CreateProduct
-            refresh={refresh}
-            //@ts-ignore
+              refresh={refresh}
+              //@ts-ignore
               productId={productId}
               visible={modalVisible}
               setVisible={setModalVisible}
@@ -221,7 +230,6 @@ function List({
 }: ListProps) {
   const [productEdit, setProductEdit] = useState(false);
   const [name, setName] = useState(item.name);
-  
 
   useEffect(() => {
     setName(item.name);
@@ -229,7 +237,6 @@ function List({
 
   // const token = localStorage.getItem("adminToken");
 
- 
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [popupText, setPopupText] = useState<string>("");
 
@@ -238,13 +245,16 @@ function List({
   const onContinue = async () => {
     console.log("continue clicked...");
 
-    await fetch(`https://medimart-nayg.onrender.com/product/deleteProduct/${productId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTE1NzFmZWM4M2VlM2E4OGJjNzI4YSIsImlhdCI6MTcyNjQxMzc1OX0.QH1quEr3Hakn0Ku4h7GSLbAlyrr1tj3QkEeeH9OooC0`,
-      },
-    });
+    await fetch(
+      `https://medimart-nayg.onrender.com/product/deleteProduct/${productId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTE1NzFmZWM4M2VlM2E4OGJjNzI4YSIsImlhdCI6MTcyNjQxMzc1OX0.QH1quEr3Hakn0Ku4h7GSLbAlyrr1tj3QkEeeH9OooC0`,
+        },
+      }
+    );
 
     setOpenPopup(false);
     refresh();
@@ -288,33 +298,30 @@ function List({
             )}
           </div>
         </div>
-    
-          
-     
-          <>
-            <div className="flex flex-nowrap">
-              <button
-                className="bg-teal-600 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
-                onClick={() => {
-                  setProductId(item._id);
-                  setModalVisible(true);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className="bg-red-700 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
-                onClick={() => {
-                  setProductId(item._id);
-                  setPopupText("Do your really want to delete this product ?");
-                  setOpenPopup(true);
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </>
-        
+
+        <>
+          <div className="flex flex-nowrap">
+            <button
+              className="bg-teal-600 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
+              onClick={() => {
+                setProductId(item._id);
+                setModalVisible(true);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className="bg-red-700 mx-2 w-[70px]  text-white rounded-md text-[14px] p-1"
+              onClick={() => {
+                setProductId(item._id);
+                setPopupText("Do your really want to delete this product ?");
+                setOpenPopup(true);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </>
       </div>
     </>
   );

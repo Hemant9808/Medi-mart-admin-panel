@@ -64,7 +64,7 @@ export default function Category() {
   }
 
   return (
-    <>
+    <div className="md:min-h-screen">
       {/* Header  */}
       <div
         className={`${
@@ -84,14 +84,14 @@ export default function Category() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button
+          {/* <button
             onClick={() => {
               setModalVisible(true);
             }}
             className="flex justify-center items-center px-5 py-3 mx-2 my-3 card2 "
           >
             Add Product
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -135,6 +135,6 @@ export default function Category() {
 
         // createCategory && <AddCategory token={token} setVisible={setCreateCategory} refresh={getData} />
       }
-    </>
+    </div>
   );
 }
