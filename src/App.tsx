@@ -8,6 +8,8 @@ import AdminProduct from "./pages/Admin/AdminProduct"
 import Category from "./pages/Category"
 import CreatePost from "./pages/CreatePost"
 import Footer from "./components/Footer"
+import Dashboard from "./pages/Dashboard"
+
 
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
       <Route path="/admin/blog/" element={<Blog/>}/>
       <Route path="/admin/posts/:postId" element={<UpdateBlog />} />
       <Route path="/admin/blogposts/:postId" element={<Blogpost />} />
+      <Route path="/admin/dashboard" element={<Dashboard />} />
 
     </Routes>
     <Footer/>

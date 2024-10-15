@@ -39,6 +39,9 @@ const Navbar = () => {
             <Link to="/" className="relative font-semibold text-white cursor-pointer text-[17px] w-fit md:block after:block after:content-[''] after:absolute after:h-[3px] after:bg-yellow-400 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center text-yellow-100 hover:text-yellow-400">
               Products
             </Link>
+            <Link to="/admin/dashboard" className="relative font-semibold text-white cursor-pointer text-[17px] w-fit md:block after:block after:content-[''] after:absolute after:h-[3px] after:bg-yellow-400 after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center text-yellow-100 hover:text-yellow-400">
+              Dashboard
+            </Link>
           </div>
         </div>
       </div>
