@@ -6,6 +6,7 @@ import type { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import CustomButton from "../../components/CustomButton/CustomButton";
 
 interface PrescriptionDataType {
   key: string;
@@ -30,7 +31,7 @@ const App: React.FC = () => {
   // Fetching prescription data from API
   const getAllPrescription = async () => {
     const response = await axios.get(
-      "http://localhost:4000/product/getAllPrescription"
+      "https://medimart-nayg.onrender.com/product/getAllPrescription"
     );
     const formattedData = response.data.map((item: any) => ({
       key: item._id,
@@ -200,8 +201,22 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="md:px-[8rem] py-[5rem] overflow-auto">
-      <h1 className="text-teal-500 font-semibold text-3xl mb-4">Dashboard</h1>
+    <div className="md:px-[8rem] px-2 sm:py-[5rem] overflow-auto">
+        <div className="flex justify-end p-6">
+        <Link to="/admin/dashboard/prescription">
+          <CustomButton type="button" varient="secondary">
+            Prescription
+          </CustomButton>
+        </Link>
+        <Link to="/admin/dashboard/orders">
+          <CustomButton type="button" varient="secondary">
+            Orders
+          </CustomButton>
+        </Link>
+      </div>
+
+      
+      <h1 className="text-2xl font-semibold text-gray-700 mb-6">Presciption</h1>
       <div className="min-w-[1000px] overflow-x-scroll">
         <Table<PrescriptionDataType>
           columns={columns}
