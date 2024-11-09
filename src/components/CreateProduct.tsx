@@ -152,18 +152,26 @@ export default function CreateProduct({
   });
 
   const fileupload = async (file: any) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    const response = await axios.post(
-      "https://medimart-nayg.onrender.com/product/upload-image",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-    console.log("image upload response", response);
-    setUploading(false);
-    setUploadedImage((prevImages) => [...prevImages, { url: response.data }]);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await axios.post(
+        "https://medimart-nayg.onrender.com/product/upload-image",
+        //  "http://localhost:4000/product/upload-image",
+  
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      console.log("image upload response", response);
+      setUploading(false);
+      setUploadedImage((prevImages) => [...prevImages, { url: response.data }]);
+    } catch (error:any) {
+      setUploading(false);
+      console.log(error.message);     
+    }
+   
   };
   console.log("uploadedImage,", uploadedImage);
 

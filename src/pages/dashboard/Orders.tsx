@@ -1,20 +1,19 @@
-
-
-
-
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import CustomButton from '../../components/CustomButton/CustomButton';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import CustomButton from "../../components/CustomButton/CustomButton";
+import axios from "axios";
 
 function Orders() {
   const [orders, setOrders] = useState<any[]>([]);
-  const [searchText, setSearchText] = useState(''); // For search text input
+  const [searchText, setSearchText] = useState(""); // For search text input
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]); // To store filtered data
 
   // Fetch orders from the API
   const getAllOrders = async () => {
-    const response = await axios.get('https://medimart-nayg.onrender.com/order/getAllOrders');
+    const response = await axios.get(
+      // "http://localhost:4000/order/getAllOrders"
+      "https://medimart-nayg.onrender.com/order/getAllOrders"
+    );
     setOrders(response.data);
     setFilteredOrders(response.data); // Initialize with the complete data
   };
@@ -30,13 +29,48 @@ function Orders() {
 
     const filtered = orders.filter((order) => {
       return (
-        order._id.toLowerCase().includes(value) ||
+        order._id.toLowerCase().includes(value) ||  
         order.user._id.toLowerCase().includes(value)
       );
     });
 
     setFilteredOrders(filtered);
   };
+  // const updateOrderStatus = async (id: string, status: string) => {
+  //   const response = await axios.post(
+  //     "http://localhost:4000/order/updateOrderStatus",
+  //     { id, status }
+  //   );
+  //   console.log(response);
+  // };
+  const updateOrderStatus = async (id: string, status: string) => {
+    try {
+      const response = await axios.post(
+        "https://medimart-nayg.onrender.com/order/updateOrderStatus",
+        { id, status }
+      );
+      if (response.status === 200) {
+        // Update order status in local state without re-fetching
+        const updatedOrders = orders.map((order) =>
+          order._id === id ? { ...order, orderStatus: status } : order
+        );
+        setOrders(updatedOrders);
+        setFilteredOrders(updatedOrders);
+      }
+    } catch (error) {
+      console.error("Failed to update order status", error);
+    }
+  };
+
+
+  // const [status, setStatus] = useState();
+
+  // // Function to handle status change
+  // const handleStatusChange = (event: any) => {
+  //   const newStatus = event.target.value;
+  //   setStatus(newStatus); // Update local state
+  //   //  updateOrderStatus(order._id, newStatus); // Call the update function
+  // };
 
   return (
     <div className="sm:p-[5rem] p-[1rem] pt-[2rem] flex flex-col justify-center">
@@ -79,19 +113,31 @@ function Orders() {
                   <h2 className="text-lg font-bold text-gray-700">
                     Order ID: {order._id}
                   </h2>
-                  <p className="text-gray-600 font-semibold">UserId: {order.user._id}</p>
-                  <p className="text-gray-600">Placed on: {new Date(order.createdAt).toLocaleDateString()}</p>
+                  <p className="text-gray-600 font-semibold">
+                    UserId: {order.user._id}
+                  </p>
                   <p className="text-gray-600">
-                    Status: <span className="font-semibold capitalize">{order.orderStatus}</span>
+                    Placed on: {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
+                  <p className="text-gray-600">
+                    Status:{" "}
+                    <span className="font-semibold capitalize">
+                      {order.orderStatus}
+                    </span>
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-gray-600">
-                    <span className="font-semibold">Total: </span>${order.totalPrice}
+                    <span className="font-semibold">Total: </span>$
+                    {order.totalPrice}
                   </p>
                   <p className="text-gray-600">
                     <span className="font-semibold">Payment Method: </span>
-                    {order.paymentMethod.toUpperCase()}
+                    {order?.paymentMethod?.toUpperCase()}
+                  </p>
+                  <p className="text-gray-600">
+                    <span className="font-semibold">Payment status: </span>
+                    {order?.paymentMethod?.toUpperCase()}
                   </p>
                 </div>
               </div>
@@ -102,21 +148,33 @@ function Orders() {
                   <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden">
                     <thead>
                       <tr>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Product</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Brand</th>
-                        <th className="px-4 py-2 text-right text-sm font-medium text-gray-600">Price</th>
-                        <th className="px-4 py-2 text-right text-sm font-medium text-gray-600">Quantity</th>
-                        <th className="px-4 py-2 text-right text-sm font-medium text-gray-600">Total</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Product
+                        </th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Brand
+                        </th>
+                        <th className="px-4 py-2 text-right text-sm font-medium text-gray-600">
+                          Price
+                        </th>
+                        <th className="px-4 py-2 text-right text-sm font-medium text-gray-600">
+                          Quantity
+                        </th>
+                        <th className="px-4 py-2 text-right text-sm font-medium text-gray-600">
+                          Total
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {order.items.map((item: any, index: any) => (
                         <tr key={index} className="border-b">
                           <td className="px-4 py-2 text-sm text-gray-700">
-                            {item.productId ? item.productId.name : 'Unknown Product'}
+                            {item.productId
+                              ? item.productId.name
+                              : "Unknown Product"}
                           </td>
                           <td className="px-4 py-2 text-sm text-gray-700">
-                            {item.productId ? item.productId.brand : 'N/A'}
+                            {item.productId ? item.productId.brand : "N/A"}
                           </td>
                           <td className="px-4 py-2 text-sm text-right text-gray-700">
                             ${item.price}
@@ -133,15 +191,39 @@ function Orders() {
                   </table>
                 </div>
               </div>
-
-              <div className="mt-4">
-                <h4 className="font-semibold text-gray-700">Shipping Information:</h4>
-                <p className="text-gray-600">
-                  {order.shippingAddress.address}, {order.shippingAddress.city}
-                </p>
-                <p className="text-gray-600">
-                  Postal Code: {order.shippingAddress.postalCode}, Country: {order.shippingAddress.country}
-                </p>
+              <div className="flex justify-between ">
+                <div className="mt-4">
+                  <h4 className="font-semibold text-gray-700">
+                    Shipping Information:
+                  </h4>
+                  <p className="text-gray-600">
+                    {order.shippingAddress.address},{" "}
+                    {order.shippingAddress.city}
+                  </p>
+                  <p className="text-gray-600">
+                    Postal Code: {order.shippingAddress.postalCode}, Country:{" "}
+                    {order.shippingAddress.country}
+                  </p>
+                </div>
+                {order.orderStatus == "delivered" ? (
+                  <> </>
+                ) : (
+                  <div className="mt-4">
+                    <select
+                      value={order.orderStatus}
+                      onChange={(e) => {
+                        updateOrderStatus(order._id, e.target.value);
+                      }}
+                      className="h-[2.4rem] rounded-lg px-3 text-white bg-gray-500 cursor-pointer"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
           ))
@@ -152,4 +234,3 @@ function Orders() {
 }
 
 export default Orders;
-

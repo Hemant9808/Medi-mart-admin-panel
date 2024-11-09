@@ -88,9 +88,9 @@ export default function AdminProduct(): JSX.Element {
 
   useEffect(() => {
     fetch(
-      `http://localhost:4000/product/getProductByCategories?category=${categoryId}`,
+      // `http://localhost:4000/product/getProductByCategories?category=${categoryId}`,
 
-      // `https://medimart-nayg.onrender.com/product/getProductByCategories?category=${categoryId}`,
+      `https://medimart-nayg.onrender.com/product/getProductByCategories?category=${categoryId}`,
       {
         method: "GET",
 
