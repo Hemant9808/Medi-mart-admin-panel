@@ -117,7 +117,9 @@ export default function CreateProduct({
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const imagesArray = uploadedImage;
     const response = await fetch(
-      "https://medimart-nayg.onrender.com/product/addProducts",
+      // "https://medimart-nayg.onrender.com/product/addProducts",
+      "http://localhost:4000/product/addProducts",
+
       {
         method: "POST",
         headers: {
@@ -166,7 +168,7 @@ export default function CreateProduct({
       );
       console.log("image upload response", response);
       setUploading(false);
-      setUploadedImage((prevImages) => [...prevImages, { url: response.data }]);
+      setUploadedImage((prevImages) => [...prevImages, { url: response.data.coverImage }]);
     } catch (error:any) {
       setUploading(false);
       console.log(error.message);     
