@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import CustomCard from "../components/CustomCard";
 // import AddCategory from "../components/AddCategory";
-import CreateProduct from "../components/CreateProduct";
+// import CreateProduct from "../components/CreateProduct";
 import { Dialog } from "@mui/material";
-import { refresh } from "aos";
-import axios from "axios";
+// import { refresh } from "aos";
+// import axios from "axios";
 import { AddCategoryDialog } from "../components/AddCategoryDialog";
 
 interface Category {
